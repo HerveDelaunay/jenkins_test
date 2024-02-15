@@ -23,8 +23,8 @@ stages {
                 steps {
                     script {
                     sh '''
-                    docker run -d -p 80:8000 --name jenkins $DOCKER_ID/$CAST_IMAGE:$DOCKER_TAG
-                    docker run -d -p 81:8000 --name jenkins $DOCKER_ID/$MOVIE_IMAGE:$DOCKER_TAG
+                    docker run -d -p 80:8000 --rm --name jenkins-cast $DOCKER_ID/$CAST_IMAGE:$DOCKER_TAG
+                    docker run -d -p 81:8000 --rm --name jenkins-movie $DOCKER_ID/$MOVIE_IMAGE:$DOCKER_TAG
                     sleep 10
                     '''
                     }
