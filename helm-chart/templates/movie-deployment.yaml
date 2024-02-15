@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.movieApp.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.movieApp.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.movieApp.label }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.movieApp.label }}
+    spec:
+      containers:
+        - name: {{ .Values.movieApp.containerName }}
+          image: {{ .Values.movieApp.image }}:v{{ .Values.tag }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: {{ .Values.movieApp.port }}
+          env:
+            - name: DATABASE_URI
+              value: "postgresql://datascientest:ZGF0YXNjaWVudGVzdAo=@db-movie-service/datascientest"
+            - name: CAST_SERVICE_HOST_URL
+              value: "http://cast-app-service:8000/api/v1/casts/"
+          volumeMounts:
+            - name: {{ .Values.movieApp.volume.name }}
+              mountPath: {{ .Values.movieApp.volume.mountPath }}
+          command: ["uvicorn"]
+          args: ["app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ .Values.movieApp.volume.name }}
+      spec:
+        accessModes: ["ReadWriteOnce"] 
+        storageClassName: "local-path" 
+        resources:
+          requests:
+            storage: {{ .Values.movieApp.volume.storageSize }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.movieApp.name }}-service
+  labels:
+    name: {{ .Values.movieApp.label }}
+  namespace: {{ .Values.namespace }}
+spec:
+  ports:
+    - port: {{ .Values.movieApp.port }}
+      targetPort: {{ .Values.movieApp.port }}
+      protocol: {{ .Values.movieApp.protocol }}
+  type: ClusterIP
+  selector:
+    app: {{ .Values.movieApp.label }}

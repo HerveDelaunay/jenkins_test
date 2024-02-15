@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.dbCast.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.dbCast.name }}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.dbCast.name }}
+    spec:
+      containers:
+      - name: {{ .Values.dbCast.name }}
+        image: {{ .Values.dbCast.image }}:{{ .Values.dbCast.version }}
+        ports:
+        - containerPort: {{ .Values.dbCast.port }}
+        volumeMounts:
+        - name: {{ .Values.dbCast.volume.name }}
+          mountPath: {{ .Values.dbCast.volume.mountPath }}
+        env:
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.dbCast.secretName }}
+                key: POSTGRES_PASSWORD
+          - name: POSTGRES_USER
+            value: {{ .Values.dbCast.dbName }}
+          - name: POSTGRES_DB
+            value: {{ .Values.dbCast.dbName }}
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Values.dbCast.volume.name }}
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "local-path"
+      resources:
+        requests:
+          storage: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.dbCast.name }}-service
+  labels:
+    app: {{ .Values.dbCast.label }}-service
+spec:
+  type: {{ .Values.dbCast.type }}
+  ports:
+    - port: {{ .Values.dbCast.port }}
+      targetPort: {{ .Values.dbCast.port }}
+      protocol: {{ .Values.dbCast.protocol }}
+  selector:
+    app: {{ .Values.dbCast.name }}

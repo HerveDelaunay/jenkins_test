@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.castApp.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.castApp.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.castApp.label }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.castApp.label }}
+    spec:
+      containers:
+        - name: {{ .Values.castApp.containerName }}
+          image: {{ .Values.castApp.image }}:v{{ .Values.tag }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: {{ .Values.castApp.port }}
+          env:
+            - name: DATABASE_URI
+              value: "postgresql://datascientest:ZGF0YXNjaWVudGVzdAo=@db-cast-service/datascientest"
+          volumeMounts:
+            - name: {{ .Values.castApp.volume.name }}
+              mountPath: {{ .Values.castApp.volume.mountPath }}
+          command: ["uvicorn"]
+          args: ["app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ .Values.castApp.volume.name }}
+      spec:
+        accessModes: ["ReadWriteOnce"] 
+        storageClassName: "local-path" 
+        resources:
+          requests:
+            storage: {{ .Values.castApp.volume.storageSize }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.castApp.name }}-service
+  labels:
+    name: {{ .Values.castApp.label }}
+  namespace: {{ .Values.namespace }}
+spec:
+  ports:
+    - port: {{ .Values.castApp.port }}
+      targetPort: {{ .Values.castApp.port }}
+      protocol: {{  .Values.castApp.protocol }}
+  type: ClusterIP
+  selector:
+    app: {{ .Values.castApp.label }}

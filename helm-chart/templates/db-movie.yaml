@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.dbMovie.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.dbMovie.name }}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.dbMovie.name }}
+    spec:
+      containers:
+      - name: {{ .Values.dbMovie.name }}
+        image: {{ .Values.dbMovie.image }}:{{ .Values.dbMovie.version }}
+        ports:
+        - containerPort: {{ .Values.dbMovie.port }}
+        volumeMounts:
+        - name: {{ .Values.dbMovie.volume.name }}
+          mountPath: {{ .Values.dbMovie.volume.mountPath }}
+        env:
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.dbMovie.secretName }}
+                key: POSTGRES_PASSWORD
+          - name: POSTGRES_USER
+            value: {{ .Values.dbMovie.dbName }}
+          - name: POSTGRES_DB
+            value: {{ .Values.dbMovie.dbName }}
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Values.dbMovie.volume.name }}
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "local-path"
+      resources:
+        requests:
+          storage: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.dbMovie.name }}-service
+  labels:
+    app: {{ .Values.dbMovie.label }}-service
+spec:
+  type: {{ .Values.dbMovie.type }}
+  ports:
+    - port: {{ .Values.dbMovie.port }}
+      targetPort: {{ .Values.dbMovie.port }}
+      protocol: {{ .Values.dbMovie.protocol }}
+  selector:
+          app: {{ .Values.dbMovie.name }}

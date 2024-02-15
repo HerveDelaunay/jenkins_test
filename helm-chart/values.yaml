@@ -1,0 +1,87 @@
+global:
+  namespace: dev # Valeur par défaut qui peut être écrasée
+tag: ""
+castApp:
+  name: cast-app
+  replicas: 1
+  label: cast-app
+  containerName: cast-app
+  image: hdelaunay/cast-app
+  port: 8000
+  protocol: TCP
+  type: ClusterIP
+  dbPassword: datascientest
+  volume:
+    name: cast-app-volume
+    mountPath: /app1/
+    storageSize: 5Gi
+
+movieApp:
+  name: movie-app
+  replicas: 1 
+  label: movie-app
+  containerName: movie-app
+  image: hdelaunay/movie-app
+  port: 8000
+  protocol: TCP
+  type: ClusterIP
+  volume:
+    name: movie-app-volume
+    mountPath: /app2/
+    storageSize: 5Gi
+
+nginx:
+  name: nginx-app
+  replicas: 1 
+  label: nginx-app
+  containerName: nginx-app
+  image: nginx
+  version: latest
+  port: 8081
+  targetPort: 8080
+  protocol: TCP
+  type: NodePort
+  configMapName: nginx-configmap
+  volume:
+    name: nginx-config-volume
+    mountPath: /etc/nginx/conf.d
+
+dbCast:
+  name: db-cast
+  replicas: 1 
+  label: db-cast
+  containerName: db-cast
+  image: postgres
+  version: 12.1-alpine
+  port: 5432
+  protocol: TCP
+  type: ClusterIP
+  env:
+    POSTGRES_USER: datascientest
+    POSTGRES_DB: datascientest
+  secretName: secret-db-cast
+  volume:
+    name: db-cast-volume
+    mountPath: /var/lib/postgresql/data
+    storageSize: 5Gi
+  dbName: datascientest
+
+dbMovie:
+  name: db-movie
+  replicas: 1 
+  label: db-movie
+  containerName: db-movie
+  image: postgres
+  version: 12.1-alpine
+  port: 5432
+  protocol: TCP
+  type: ClusterIP
+  env:
+    POSTGRES_USER: datascientest
+    POSTGRES_DB: datascientest
+  secretName: secret-db-movie
+  volume:
+    name: db-movie-volume
+    mountPath: /var/lib/postgresql/data/
+    storageSize: 5Gi
+  dbName: datascientest
