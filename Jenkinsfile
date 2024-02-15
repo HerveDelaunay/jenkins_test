@@ -74,8 +74,8 @@ stage('Deploiement en dev'){
                 ls
                 cat $KUBECONFIG > .kube/config
 		cd /home/ubuntu/jenkins_test/helm-chart
-                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yml
-                helm upgrade --install app . --values=values.yml --namespace dev
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yaml
+                helm upgrade --install app . --values=values.yaml --namespace dev
                 '''
                 }
             }
@@ -94,8 +94,8 @@ stage('Deploiement en staging'){
                 ls
                 cat $KUBECONFIG > .kube/config
 		cd /home/ubuntu/jenkins_test/helm-chart
-                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yml
-                helm upgrade --install app . --values=values.yml --namespace staging
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yaml
+                helm upgrade --install app . --values=values.yaml --namespace staging
                 '''
                 }
             }
@@ -115,8 +115,8 @@ stage('Deploiement en staging'){
                 ls
                 cat $KUBECONFIG > .kube/config
 		cd /home/ubuntu/jenkins_test/helm-chart
-                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yml
-                helm upgrade --install app . --values=values.yml --namespace qa
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yaml
+                helm upgrade --install app . --values=values.yaml --namespace qa
                 '''
                 }
             }
@@ -141,8 +141,8 @@ stage('Deploiement en staging'){
                 ls
                 cat $KUBECONFIG > .kube/config
 		cd /home/ubuntu/jenkins_test/helm-chart
-                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yml
-                helm upgrade --install app . --values=values.yml --namespace prod
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yaml
+                helm upgrade --install app . --values=values.yaml --namespace prod
                 '''
                 }
             }
