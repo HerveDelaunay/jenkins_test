@@ -74,7 +74,7 @@ stage('Deploiement en dev'){
                 ls
                 cat $KUBECONFIG > .kube/config
 		cd /home/ubuntu/jenkins_test/helm-chart
-                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yml
                 helm upgrade --install app . --values=values.yml --namespace dev
                 '''
                 }
@@ -94,7 +94,7 @@ stage('Deploiement en staging'){
                 ls
                 cat $KUBECONFIG > .kube/config
 		cd /home/ubuntu/jenkins_test/helm-chart
-                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yml
                 helm upgrade --install app . --values=values.yml --namespace staging
                 '''
                 }
@@ -115,7 +115,7 @@ stage('Deploiement en staging'){
                 ls
                 cat $KUBECONFIG > .kube/config
 		cd /home/ubuntu/jenkins_test/helm-chart
-                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yml
                 helm upgrade --install app . --values=values.yml --namespace qa
                 '''
                 }
@@ -141,7 +141,7 @@ stage('Deploiement en staging'){
                 ls
                 cat $KUBECONFIG > .kube/config
 		cd /home/ubuntu/jenkins_test/helm-chart
-                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yml
                 helm upgrade --install app . --values=values.yml --namespace prod
                 '''
                 }
