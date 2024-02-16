@@ -1,6 +1,6 @@
 global:
   namespace: dev # Valeur par défaut qui peut être écrasée
-tag: ""
+tag: 0
 castApp:
   name: cast-app
   replicas: 1

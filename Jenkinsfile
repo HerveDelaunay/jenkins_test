@@ -73,9 +73,7 @@ stage('Deploiement en dev'){
                 mkdir .kube
                 ls
                 cat $KUBECONFIG > .kube/config
-                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml > tmp.yaml
-		 cat tmp.yaml > helm-chart/values.yaml
-		 rm tmp.yaml
+                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml
 		echo "here are the values :"
 		cat helm-chart/values.yaml
                 helm upgrade --install app ./helm-chart --values=helm-chart/values.yaml --namespace dev
@@ -96,9 +94,7 @@ stage('Deploiement en staging'){
                 mkdir .kube
                 ls
                 cat $KUBECONFIG > .kube/config
-                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml > tmp.yaml
-		 cat tmp.yaml > helm-chart/values.yaml
-		 rm tmp.yaml
+                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml 
 		echo "here are the values :"
 		cat helm-chart/values.yaml
                 helm upgrade --install app ./helm-chart --values=helm-chart/values.yaml --namespace staging
@@ -120,9 +116,7 @@ stage('Deploiement en staging'){
                 mkdir .kube
                 ls
                 cat $KUBECONFIG > .kube/config
-                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml > tmp.yaml
-		 cat tmp.yaml > helm-chart/values.yaml
-		 rm tmp.yaml
+                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml
 		echo "here are the values :"
 		cat helm-chart/values.yaml
                 helm upgrade --install app ./helm-chart --values=helm-chart/values.yaml --namespace qa
@@ -149,9 +143,7 @@ stage('Deploiement en staging'){
                 mkdir .kube
                 ls
                 cat $KUBECONFIG > .kube/config
-                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml > tmp.yaml
-		 cat tmp.yaml > helm-chart/values.yaml
-		 rm tmp.yaml
+                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml
 		echo "here are the values :"
 		cat helm-chart/values.yaml
                 helm upgrade --install app ./helm-chart --values=./helm-chart/values.yaml --namespace prod
