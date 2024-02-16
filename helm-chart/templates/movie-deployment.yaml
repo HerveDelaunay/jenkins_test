@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: {{ .Values.movieApp.containerName }}
-          image: {{ .Values.movieApp.image }}:v{{ .Values.tag }}
+          image: {{ .Values.movieApp.image }}:{{ .Values.tag }}
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: {{ .Values.movieApp.port }}
