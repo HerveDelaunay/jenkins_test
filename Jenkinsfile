@@ -133,8 +133,7 @@ stages {
                 }
                 steps {
                     script {
-			echo 'the current branch name is : ${BRANCH}'
-                        if ( env.BRANCH_NAME == 'master' ) {
+                        if ( $BRANCH == 'master' ) {
 
                                     timeout(time: 15, unit: "MINUTES") {
                                         input message: 'Do you want to deploy in production ?', ok: 'Yes'
