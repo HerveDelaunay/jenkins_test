@@ -19,8 +19,8 @@ spec:
         ports:
         - containerPort: {{ .Values.dbMovie.port }}
         volumeMounts:
-        - name: {{ .Values.dbMovie.volume.name }}
-          mountPath: {{ .Values.dbMovie.volume.mountPath }}
+        - name: {{ .Values.dbMovie.volumeName }}
+          mountPath: {{ .Values.dbMovie.volumeMountPath }}
         env:
           - name: POSTGRES_PASSWORD
             valueFrom:
@@ -33,7 +33,7 @@ spec:
             value: {{ .Values.dbMovie.dbName }}
   volumeClaimTemplates:
   - metadata:
-      name: {{ .Values.dbMovie.volume.name }}
+      name: {{ .Values.dbMovie.volumeName }}
     spec:
       accessModes: ["ReadWriteOnce"]
       storageClassName: "local-path"

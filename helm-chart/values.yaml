@@ -11,10 +11,9 @@ castApp:
   protocol: TCP
   type: ClusterIP
   dbPassword: datascientest
-  volume:
-    name: cast-app-volume
-    mountPath: /app1/
-    storageSize: 5Gi
+  volumeName: cast-app-volume
+  volumeMountPath: /app1/
+  volumeStorageSize: 5Gi
 
 movieApp:
   name: movie-app
@@ -25,10 +24,9 @@ movieApp:
   port: 8000
   protocol: TCP
   type: ClusterIP
-  volume:
-    name: movie-app-volume
-    mountPath: /app2/
-    storageSize: 5Gi
+  volumeName: movie-app-volume
+  volumeMountPath: /app2/
+  volumeStorageSize: 5Gi
 
 nginx:
   name: nginx-app
@@ -42,9 +40,8 @@ nginx:
   protocol: TCP
   type: NodePort
   configMapName: nginx-configmap
-  volume:
-    name: nginx-config-volume
-    mountPath: /etc/nginx/conf.d
+  volumeName: nginx-config-volume
+  volumeMountPath: /etc/nginx/conf.d
 
 dbCast:
   name: db-cast
@@ -56,14 +53,11 @@ dbCast:
   port: 5432
   protocol: TCP
   type: ClusterIP
-  env:
-    POSTGRES_USER: datascientest
-    POSTGRES_DB: datascientest
   secretName: secret-db-cast
   volume:
-    name: db-cast-volume
-    mountPath: /var/lib/postgresql/data
-    storageSize: 5Gi
+  volumeName: db-cast-volume
+  volumeMountPath: /var/lib/postgresql/data
+  volumeStorageSize: 5Gi
   dbName: datascientest
 
 dbMovie:
@@ -76,12 +70,9 @@ dbMovie:
   port: 5432
   protocol: TCP
   type: ClusterIP
-  env:
-    POSTGRES_USER: datascientest
-    POSTGRES_DB: datascientest
   secretName: secret-db-movie
   volume:
-    name: db-movie-volume
-    mountPath: /var/lib/postgresql/data/
-    storageSize: 5Gi
+  volumeName: db-movie-volume
+  volumeMountPath: /var/lib/postgresql/data/
+  volumeStorageSize: 5Gi
   dbName: datascientest

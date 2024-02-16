@@ -26,19 +26,19 @@ spec:
             - name: CAST_SERVICE_HOST_URL
               value: "http://cast-app-service:8000/api/v1/casts/"
           volumeMounts:
-            - name: {{ .Values.movieApp.volume.name }}
-              mountPath: {{ .Values.movieApp.volume.mountPath }}
+            - name: {{ .Values.movieApp.volumeName }}
+              mountPath: {{ .Values.movieApp.volumeMountPath }}
           command: ["uvicorn"]
           args: ["app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
   volumeClaimTemplates:
     - metadata:
-        name: {{ .Values.movieApp.volume.name }}
+        name: {{ .Values.movieApp.volumeName }}
       spec:
         accessModes: ["ReadWriteOnce"] 
         storageClassName: "local-path" 
         resources:
           requests:
-            storage: {{ .Values.movieApp.volume.storageSize }}
+            storage: {{ .Values.movieApp.volumeStorageSize }}
 ---
 apiVersion: v1
 kind: Service

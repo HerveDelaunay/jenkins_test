@@ -24,19 +24,19 @@ spec:
             - name: DATABASE_URI
               value: "postgresql://datascientest:ZGF0YXNjaWVudGVzdAo=@db-cast-service/datascientest"
           volumeMounts:
-            - name: {{ .Values.castApp.volume.name }}
-              mountPath: {{ .Values.castApp.volume.mountPath }}
+            - name: {{ .Values.castApp.volumeName }}
+              mountPath: {{ .Values.castApp.volumeMountPath }}
           command: ["uvicorn"]
           args: ["app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
   volumeClaimTemplates:
     - metadata:
-        name: {{ .Values.castApp.volume.name }}
+        name: {{ .Values.castApp.volumeName }}
       spec:
         accessModes: ["ReadWriteOnce"] 
         storageClassName: "local-path" 
         resources:
           requests:
-            storage: {{ .Values.castApp.volume.storageSize }}
+            storage: {{ .Values.castApp.volumeStorageSize }}
 ---
 apiVersion: v1
 kind: Service

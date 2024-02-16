@@ -37,10 +37,10 @@ spec:
         ports:
         - containerPort: {{ .Values.nginx.port }}
         volumeMounts:
-        - mountPath: {{ .Values.nginx.volume.mountPath }}
-          name: {{ .Values.nginx.volume.name }}
+        - mountPath: {{ .Values.nginx.volumeMountPath }}
+          name: {{ .Values.nginx.volumeName }}
       volumes:
-      - name: {{ .Values.nginx.volume.name }}
+      - name: {{ .Values.nginx.volumeName }}
         configMap:
           name: nginx-configmap
           items:
