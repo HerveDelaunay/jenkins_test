@@ -129,7 +129,7 @@ stages {
                 environment
                 {
                 KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
-		BRANCH = env.BRANCH_NAME
+		BRANCH = "${env.BRANCH_NAME}"
                 }
                 steps {
                     script {
