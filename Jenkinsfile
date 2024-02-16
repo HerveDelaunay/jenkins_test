@@ -61,100 +61,97 @@ stages {
 
         }
 
-stage('Deploiement en dev'){
-        environment
-        {
-        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
-        }
-            steps {
-                script {
-                sh '''
-                rm -Rf .kube
-                mkdir .kube
-                ls
-                cat $KUBECONFIG > .kube/config
-                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml
-		echo "here are the values :"
-		cat helm-chart/values.yaml
-                helm upgrade --install app ./helm-chart --values=helm-chart/values.yaml --namespace dev
-                '''
+        stage('Deploiement en dev'){
+                environment
+                {
+                KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
                 }
-            }
-
-        }
-stage('Deploiement en staging'){
-        environment
-        {
-        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
-        }
-            steps {
-                script {
-                sh '''
-                rm -Rf .kube
-                mkdir .kube
-                ls
-                cat $KUBECONFIG > .kube/config
-                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml 
-		echo "here are the values :"
-		cat helm-chart/values.yaml
-                helm upgrade --install app ./helm-chart --values=helm-chart/values.yaml --namespace staging
-                '''
-                }
-            }
-
-        }
-  stage('Deploiement en qa'){
-        environment
-        {
-        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
-        }
-            steps {
-
-                script {
-                sh '''
-                rm -Rf .kube
-                mkdir .kube
-                ls
-                cat $KUBECONFIG > .kube/config
-                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml
-		echo "here are the values :"
-		cat helm-chart/values.yaml
-                helm upgrade --install app ./helm-chart --values=helm-chart/values.yaml --namespace qa
-                '''
-                }
-            }
-
-        }
-  stage('Deploiement en prod'){
-        environment
-        {
-	CURRENT_BRANCH = env.BRANCH_NAME
-        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
-        }
-            steps {
-		script {
-
-		if ( env.BRANCH_NAME == 'master' ) {
-
-                    timeout(time: 15, unit: "MINUTES") {
-                        input message: 'Do you want to deploy in production ?', ok: 'Yes'
-                    }
-
-                sh '''
-                rm -Rf .kube
-                mkdir .kube
-                ls
-                cat $KUBECONFIG > .kube/config
-                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml
+                    steps {
+                        script {
+                        sh '''
+                        rm -Rf .kube
+                        mkdir .kube
+                        ls
+                        cat $KUBECONFIG > .kube/config
+                        sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml
                 echo "here are the values :"
                 cat helm-chart/values.yaml
-                helm upgrade --install app ./helm-chart --values=./helm-chart/values.yaml --namespace prod
-                '''
+                        helm upgrade --install app ./helm-chart --values=helm-chart/values.yaml --namespace dev
+                        '''
+                        }
+                    }
+
                 }
+        stage('Deploiement en staging'){
+                environment
+                {
+                KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+                }
+                    steps {
+                        script {
+                        sh '''
+                        rm -Rf .kube
+                        mkdir .kube
+                        ls
+                        cat $KUBECONFIG > .kube/config
+                        sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml 
+                echo "here are the values :"
+                cat helm-chart/values.yaml
+                        helm upgrade --install app ./helm-chart --values=helm-chart/values.yaml --namespace staging
+                        '''
+                        }
+                    }
 
-		else { echo 'not in branch master, skipping deployment' }
+                }
+        stage('Deploiement en qa'){
+                environment
+                {
+                KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+                }
+                    steps {
 
-		}             }
+                        script {
+                        sh '''
+                        rm -Rf .kube
+                        mkdir .kube
+                        ls
+                        cat $KUBECONFIG > .kube/config
+                        sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml
+                echo "here are the values :"
+                cat helm-chart/values.yaml
+                        helm upgrade --install app ./helm-chart --values=helm-chart/values.yaml --namespace qa
+                        '''
+                        }
+                    }
 
+                }
+        stage('Deploiement en prod'){
+                environment
+                {
+                CURRENT_BRANCH = env.BRANCH_NAME
+                KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+                }
+                steps {
+                    script {
+                        if ( env.BRANCH_NAME == 'master' ) {
+
+                                    timeout(time: 15, unit: "MINUTES") {
+                                        input message: 'Do you want to deploy in production ?', ok: 'Yes'
+                                    }
+
+                                sh '''
+                                rm -Rf .kube
+                                mkdir .kube
+                                ls
+                                cat $KUBECONFIG > .kube/config
+                                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml
+                                echo "here are the values :"
+                                cat helm-chart/values.yaml
+                                helm upgrade --install app ./helm-chart --values=./helm-chart/values.yaml --namespace prod
+                                '''
+                        } else { echo 'not in branch master, skipping deployment' }
+                    }
+                }
             }
+    }
 }
