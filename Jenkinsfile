@@ -76,7 +76,7 @@ stage('Deploiement en dev'){
                  sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml > tmp.yaml
 		 cat tmp.yaml > helm-chart/values.yaml
 		 rm tmp.yaml
-                helm upgrade --install app . --values=values.yaml --namespace dev
+                helm upgrade --install app ./helm-chart --values=helm-chart/values.yaml --namespace dev
                 '''
                 }
             }
@@ -97,7 +97,7 @@ stage('Deploiement en staging'){
                  sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml > tmp.yaml
 		 cat tmp.yaml > helm-chart/values.yaml
 		 rm tmp.yaml
-                helm upgrade --install app . --values=values.yaml --namespace staging
+                helm upgrade --install app ./helm-chart --values=helm-chart/values.yaml --namespace staging
                 '''
                 }
             }
@@ -119,7 +119,7 @@ stage('Deploiement en staging'){
                  sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml > tmp.yaml
 		 cat tmp.yaml > helm-chart/values.yaml
 		 rm tmp.yaml
-                helm upgrade --install app . --values=values.yaml --namespace qa
+                helm upgrade --install app ./helm-chart --values=helm-chart/values.yaml --namespace qa
                 '''
                 }
             }
@@ -146,7 +146,7 @@ stage('Deploiement en staging'){
                  sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml > tmp.yaml
 		 cat tmp.yaml > helm-chart/values.yaml
 		 rm tmp.yaml
-                helm upgrade --install app . --values=values.yaml --namespace prod
+                helm upgrade --install app ./helm-chart --values=./helm-chart/values.yaml --namespace prod
                 '''
                 }
             }
