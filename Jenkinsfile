@@ -73,8 +73,8 @@ stage('Deploiement en dev'){
                 mkdir .kube
                 ls
                 cat $KUBECONFIG > .kube/config
-                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yaml > tmp.yaml
-		 cat tmp.yaml > values.yaml
+                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml > tmp.yaml
+		 cat tmp.yaml > helm-chart/values.yaml
 		 rm tmp.yaml
                 helm upgrade --install app . --values=values.yaml --namespace dev
                 '''
@@ -94,8 +94,8 @@ stage('Deploiement en staging'){
                 mkdir .kube
                 ls
                 cat $KUBECONFIG > .kube/config
-                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yaml > tmp.yaml
-		 cat tmp.yaml > values.yaml
+                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml > tmp.yaml
+		 cat tmp.yaml > helm-chart/values.yaml
 		 rm tmp.yaml
                 helm upgrade --install app . --values=values.yaml --namespace staging
                 '''
@@ -116,8 +116,8 @@ stage('Deploiement en staging'){
                 mkdir .kube
                 ls
                 cat $KUBECONFIG > .kube/config
-                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yaml > tmp.yaml
-		 cat tmp.yaml > values.yaml
+                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml > tmp.yaml
+		 cat tmp.yaml > helm-chart/values.yaml
 		 rm tmp.yaml
                 helm upgrade --install app . --values=values.yaml --namespace qa
                 '''
@@ -143,8 +143,8 @@ stage('Deploiement en staging'){
                 mkdir .kube
                 ls
                 cat $KUBECONFIG > .kube/config
-                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yaml > tmp.yaml
-		 cat tmp.yaml > values.yaml
+                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml > tmp.yaml
+		 cat tmp.yaml > helm-chart/values.yaml
 		 rm tmp.yaml
                 helm upgrade --install app . --values=values.yaml --namespace prod
                 '''
