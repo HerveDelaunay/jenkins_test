@@ -128,7 +128,6 @@ stages {
         stage('Deploiement en prod'){
                 environment
                 {
-                CURRENT_BRANCH = env.BRANCH_NAME
                 KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
                 }
                 steps {
