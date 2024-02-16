@@ -128,11 +128,14 @@ stage('Deploiement en staging'){
   stage('Deploiement en prod'){
         environment
         {
+	CURRENT_BRANCH = env.BRANCH_NAME
         KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
         }
             steps {
-            // Create an Approval Button with a timeout of 15minutes.
-            // this require a manuel validation in order to deploy on production environment
+		script {
+
+		if ( env.BRANCH_NAME == 'master' ) {
+
                     timeout(time: 15, unit: "MINUTES") {
                         input message: 'Do you want to deploy in production ?', ok: 'Yes'
                     }
@@ -149,6 +152,10 @@ stage('Deploiement en staging'){
                 helm upgrade --install app ./helm-chart --values=./helm-chart/values.yaml --namespace prod
                 '''
                 }
+
+
+		} else { echo 'not in branch master, skipping deployment' }
+		}
             }
 
         }
