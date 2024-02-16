@@ -129,10 +129,11 @@ stages {
                 environment
                 {
                 KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+		BRANCH = env.BRANCH_NAME
                 }
                 steps {
                     script {
-			echo 'the current branch name is : ${env.BRANCH_NAME}'
+			echo 'the current branch name is : $BRANCH'
                         if ( env.BRANCH_NAME == 'master' ) {
 
                                     timeout(time: 15, unit: "MINUTES") {
