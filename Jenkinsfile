@@ -152,9 +152,9 @@ stage('Deploiement en staging'){
                 '''
                 }
 
+		else { echo 'not in branch master, skipping deployment' }
 
-		} else { echo 'not in branch master, skipping deployment' }
-            }
+		}             }
 
             }
 }
