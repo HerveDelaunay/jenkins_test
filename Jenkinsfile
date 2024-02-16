@@ -140,25 +140,21 @@ stage('Deploiement en staging'){
                         input message: 'Do you want to deploy in production ?', ok: 'Yes'
                     }
 
-                script {
                 sh '''
                 rm -Rf .kube
                 mkdir .kube
                 ls
                 cat $KUBECONFIG > .kube/config
-                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml
-		echo "here are the values :"
-		cat helm-chart/values.yaml
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml
+                echo "here are the values :"
+                cat helm-chart/values.yaml
                 helm upgrade --install app ./helm-chart --values=./helm-chart/values.yaml --namespace prod
                 '''
                 }
 
 
 		} else { echo 'not in branch master, skipping deployment' }
-		}
             }
 
-        }
-
-}
+            }
 }
