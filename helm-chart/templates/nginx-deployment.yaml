@@ -20,16 +20,16 @@ data:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ .Values.nginx.name }}
+  name: {{ $.Values.nginx.name }}
 spec:
   replicas: {{ .Values.nginx.replicas }}
   selector:
     matchLabels:
-      app: {{ .Values.nginx.name }}
+      app: {{ $.Values.nginx.name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.nginx.name }}
+        app: {{ $.Values.nginx.name }}
     spec:
       containers:
       - name: {{ .Values.nginx.containerName }}
@@ -50,7 +50,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.nginx.name }}-service
+  name: {{ $.Values.nginx.name }}-service
   labels:
     name: {{ .Values.nginx.label }}-service
 spec:
@@ -60,4 +60,4 @@ spec:
       targetPort: {{ .Values.nginx.targetPort }}
       protocol: TCP
   selector:
-    app: {{ .Values.nginx.name }}
+    app: {{ $.Values.nginx.name }}
