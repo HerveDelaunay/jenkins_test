@@ -74,8 +74,6 @@ stages {
                         ls
                         cat $KUBECONFIG > .kube/config
                         sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml
-                echo "here are the values :"
-                cat helm-chart/values.yaml
                         helm upgrade --install app ./helm-chart --values=helm-chart/values.yaml --namespace dev
                         '''
                         }
@@ -95,8 +93,6 @@ stages {
                         ls
                         cat $KUBECONFIG > .kube/config
                         sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml 
-                echo "here are the values :"
-                cat helm-chart/values.yaml
                         helm upgrade --install app ./helm-chart --values=helm-chart/values.yaml --namespace staging
                         '''
                         }
@@ -117,8 +113,6 @@ stages {
                         ls
                         cat $KUBECONFIG > .kube/config
                         sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml
-                echo "here are the values :"
-                cat helm-chart/values.yaml
                         helm upgrade --install app ./helm-chart --values=helm-chart/values.yaml --namespace qa
                         '''
                         }
@@ -132,7 +126,6 @@ stages {
                 }
                 steps {
                     script {
-				sh 'printenv'
                         if ( env.GIT_BRANCH == 'origin/master' ) {
 
                                     timeout(time: 15, unit: "MINUTES") {
@@ -145,8 +138,6 @@ stages {
                                 ls
                                 cat $KUBECONFIG > .kube/config
                                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" helm-chart/values.yaml
-                                echo "here are the values :"
-                                cat helm-chart/values.yaml
                                 helm upgrade --install app ./helm-chart --values=./helm-chart/values.yaml --namespace prod
                                 '''
                         } else { echo 'not in branch master, skipping deployment' }
