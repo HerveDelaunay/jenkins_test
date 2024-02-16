@@ -132,7 +132,7 @@ stages {
                 }
                 steps {
                     script {
-			echo 'the current branch name is : $BRANCH_NAME'
+			echo 'the current branch name is : ${BRANCH_NAME}'
                         if ( env.BRANCH_NAME == 'master' ) {
 
                                     timeout(time: 15, unit: "MINUTES") {
