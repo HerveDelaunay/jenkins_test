@@ -133,7 +133,7 @@ stages {
                 steps {
                     script {
 				sh 'printenv'
-                        if ( env.BRANCH_NAME == 'master' ) {
+                        if ( env.GIT_BRANCH == 'origin/master' ) {
 
                                     timeout(time: 15, unit: "MINUTES") {
                                         input message: 'Do you want to deploy in production ?', ok: 'Yes'
