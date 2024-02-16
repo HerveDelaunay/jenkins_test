@@ -132,6 +132,7 @@ stages {
                 }
                 steps {
                     script {
+				sh 'printenv'
                         if ( env.BRANCH_NAME == 'master' ) {
 
                                     timeout(time: 15, unit: "MINUTES") {
@@ -139,7 +140,6 @@ stages {
                                     }
 
                                 sh '''
-				sh 'printenv'
                                 rm -Rf .kube
                                 mkdir .kube
                                 ls
